@@ -12,20 +12,18 @@ export { HolidaysResource } from './holidays.js'
 export { JobsResource, type WaitQuery } from './jobs.js'
 export { MinecraftResource, type RenderQuery } from './minecraft.js'
 export {
+  MUSIC_EVENTS,
   MusicResource,
   type LoopBody,
   type MoveBody,
   type MuteBody,
-  type PlayBody,
-  type SeekBody,
-  type VolumeBody,
-} from './music.js'
-export {
-  MUSIC_EVENTS,
   type MusicEventMap,
   type MusicEventName,
   type MusicEventTrack,
-} from './music-events.js'
+  type PlayBody,
+  type SeekBody,
+  type VolumeBody,
+} from './music/index.js'
 export { RobloxResource } from './roblox.js'
 export {
   TranslationResource,

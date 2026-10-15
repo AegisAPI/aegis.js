@@ -1,8 +1,8 @@
-import { Resource } from './base.js'
-import { EventSocket, type SocketOptions } from '../socket.js'
-import type { Http } from '../http.js'
+import { Resource } from '../base.js'
+import { EventSocket, type SocketOptions } from '../../socket.js'
+import type { Http } from '../../http.js'
 import type { MusicEventMap, MusicEventName } from './music-events.js'
-import type { JsonBodyOf, Operation } from '../types.js'
+import type { JsonBodyOf, Operation } from '../../types.js'
 
 const PLAY = '/v1/music/guilds/{guildId}/play' as const
 const PAUSE = '/v1/music/guilds/{guildId}/pause' as const
