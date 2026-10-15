@@ -1747,7 +1747,7 @@ export interface paths {
         put?: never;
         /**
          * Play or queue a track
-         * @description Searches (or takes a URL) and plays it, or queues it behind what is playing. The bot joins `channelId` if it is not already in a call in this guild.
+         * @description Plays what `query` finds, or exactly the track that `track` names, which is what a search hands back. Either way it goes behind whatever is already playing. The bot joins `channelId` if it is not already in a call in this guild.
          */
         post: {
             parameters: {
@@ -1760,9 +1760,12 @@ export interface paths {
             };
             requestBody: {
                 content: {
-                    "application/json": {
+                    "application/json": ({
                         /** @example lofi hip hop */
                         query: string;
+                    } | {
+                        track: components["schemas"]["TrackRef"];
+                    }) & {
                         /** @description Voice channel to join. Required when the bot is not in one yet. */
                         channelId?: string;
                     };
@@ -2179,6 +2182,94 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/music/guilds/{guildId}/restart": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Play the current track again
+         * @description Starts the current track over from the start, keeping it paused or playing as it was.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    guildId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description The track, restarted. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            data: components["schemas"]["RestartResult"];
+                        };
+                    };
+                };
+                /** @description The API key is not linked to a bot. */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description No player in that guild. */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Conflicts with the current player state. */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description The request cannot be carried out as given. */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description The music workers are unavailable or timed out. */
+                503: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/music/guilds/{guildId}/queue": {
         parameters: {
             query?: never;
@@ -2337,6 +2428,265 @@ export interface paths {
         options?: never;
         head?: never;
         patch?: never;
+        trace?: never;
+    };
+    "/v1/music/guilds/{guildId}/shuffle": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Shuffle the queue
+         * @description Randomises the order of the queued tracks. The current track is left alone.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    guildId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description The queue in its new order. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            data: components["schemas"]["ShuffleResult"];
+                        };
+                    };
+                };
+                /** @description The API key is not linked to a bot. */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description No player in that guild. */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Conflicts with the current player state. */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description The request cannot be carried out as given. */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description The music workers are unavailable or timed out. */
+                503: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/music/guilds/{guildId}/queue/{index}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Remove a queued track
+         * @description Removes one track from the queue by position. Everything after it moves up by one.
+         */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    guildId: string;
+                    /** @description Zero-based position in the queue, where 0 is the next track up. */
+                    index: number | null;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description The removed track and the queue after it. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            data: components["schemas"]["RemoveResult"];
+                        };
+                    };
+                };
+                /** @description The API key is not linked to a bot. */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description No player in that guild. */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Conflicts with the current player state. */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description The request cannot be carried out as given. */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description The music workers are unavailable or timed out. */
+                503: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        /**
+         * Move a queued track
+         * @description Moves one track to another position in the queue. `to` is where it lands, so moving the last track to `0` puts it next up.
+         */
+        patch: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    guildId: string;
+                    /** @description Zero-based position in the queue, where 0 is the next track up. */
+                    index: number | null;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /** @example 0 */
+                        to: number | null;
+                    };
+                };
+            };
+            responses: {
+                /** @description The moved track and the queue after it. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            data: components["schemas"]["MoveResult"];
+                        };
+                    };
+                };
+                /** @description The API key is not linked to a bot. */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description No player in that guild. */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Conflicts with the current player state. */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description The request cannot be carried out as given. */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description The music workers are unavailable or timed out. */
+                503: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
         trace?: never;
     };
     "/v1/music/guilds/{guildId}/volume": {
@@ -2764,353 +3114,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/music/guilds/{guildId}/shuffle": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Shuffle the queue
-         * @description Randomises the order of the queued tracks. The current track is left alone.
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    guildId: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description The queue in its new order. */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data: components["schemas"]["ShuffleResult"];
-                        };
-                    };
-                };
-                /** @description The API key is not linked to a bot. */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-                /** @description No player in that guild. */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-                /** @description Conflicts with the current player state. */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-                /** @description The request cannot be carried out as given. */
-                422: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-                /** @description The music workers are unavailable or timed out. */
-                503: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/music/guilds/{guildId}/queue/{index}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * Remove a queued track
-         * @description Removes one track from the queue by position. Everything after it moves up by one.
-         */
-        delete: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    guildId: string;
-                    /** @description Zero-based position in the queue, where 0 is the next track up. */
-                    index: number | null;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description The removed track and the queue after it. */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data: components["schemas"]["RemoveResult"];
-                        };
-                    };
-                };
-                /** @description The API key is not linked to a bot. */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-                /** @description No player in that guild. */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-                /** @description Conflicts with the current player state. */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-                /** @description The request cannot be carried out as given. */
-                422: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-                /** @description The music workers are unavailable or timed out. */
-                503: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-            };
-        };
-        options?: never;
-        head?: never;
-        /**
-         * Move a queued track
-         * @description Moves one track to another position in the queue. `to` is where it lands, so moving the last track to `0` puts it next up.
-         */
-        patch: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    guildId: string;
-                    /** @description Zero-based position in the queue, where 0 is the next track up. */
-                    index: number | null;
-                };
-                cookie?: never;
-            };
-            requestBody: {
-                content: {
-                    "application/json": {
-                        /** @example 0 */
-                        to: number | null;
-                    };
-                };
-            };
-            responses: {
-                /** @description The moved track and the queue after it. */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data: components["schemas"]["MoveResult"];
-                        };
-                    };
-                };
-                /** @description The API key is not linked to a bot. */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-                /** @description No player in that guild. */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-                /** @description Conflicts with the current player state. */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-                /** @description The request cannot be carried out as given. */
-                422: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-                /** @description The music workers are unavailable or timed out. */
-                503: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-            };
-        };
-        trace?: never;
-    };
-    "/v1/music/guilds/{guildId}/restart": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Play the current track again
-         * @description Starts the current track over from the start, keeping it paused or playing as it was.
-         */
-        post: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path: {
-                    guildId: string;
-                };
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description The track, restarted. */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            data: components["schemas"]["RestartResult"];
-                        };
-                    };
-                };
-                /** @description The API key is not linked to a bot. */
-                403: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-                /** @description No player in that guild. */
-                404: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-                /** @description Conflicts with the current player state. */
-                409: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-                /** @description The request cannot be carried out as given. */
-                422: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-                /** @description The music workers are unavailable or timed out. */
-                503: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-            };
-        };
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/v1/music/guilds/{guildId}/loop": {
         parameters: {
             query?: never;
@@ -3271,6 +3274,98 @@ export interface paths {
                 };
             };
         };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/music/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Search for tracks
+         * @description Looks for tracks without touching the player. Each result carries the `encoded` string that `POST /play` accepts, so a picker can search first and play exactly what was chosen.
+         */
+        get: {
+            parameters: {
+                query: {
+                    query: string;
+                    /** @description How many results to return. */
+                    limit?: number;
+                    /** @description Which source to search on. */
+                    provider?: "youtube" | "spotify";
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description The tracks that matched. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            data: components["schemas"]["MusicSearchResult"];
+                        };
+                    };
+                };
+                /** @description The API key is not linked to a bot. */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description No player in that guild. */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Conflicts with the current player state. */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description The request cannot be carried out as given. */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description The music workers are unavailable or timed out. */
+                503: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -3476,6 +3571,9 @@ export interface components {
             artworkUrl: string | null;
             isStream: boolean;
         };
+        TrackRef: {
+            encoded: string;
+        };
         PausedResult: {
             paused: boolean;
         };
@@ -3485,6 +3583,10 @@ export interface components {
         OkResult: {
             /** @enum {boolean} */
             ok: true;
+        };
+        RestartResult: {
+            track: components["schemas"]["Track"];
+            positionMs: number;
         };
         PlayerState: {
             channelId: string;
@@ -3500,16 +3602,6 @@ export interface components {
             current: components["schemas"]["Track"] & unknown;
             queue: components["schemas"]["Track"][];
         };
-        VolumeResult: {
-            volume: number;
-            muted: boolean;
-        };
-        MuteResult: {
-            muted: boolean;
-        };
-        SeekResult: {
-            positionMs: number;
-        };
         ShuffleResult: {
             queue: components["schemas"]["Track"][];
         };
@@ -3524,8 +3616,14 @@ export interface components {
             moved: components["schemas"]["Track"];
             queue: components["schemas"]["Track"][];
         };
-        RestartResult: {
-            track: components["schemas"]["Track"];
+        VolumeResult: {
+            volume: number;
+            muted: boolean;
+        };
+        MuteResult: {
+            muted: boolean;
+        };
+        SeekResult: {
             positionMs: number;
         };
         LoopResult: {
@@ -3534,6 +3632,12 @@ export interface components {
              * @enum {string}
              */
             loop: "off" | "track" | "queue";
+        };
+        MusicSearchResult: {
+            results: components["schemas"]["MusicSearchTrack"][];
+        };
+        MusicSearchTrack: components["schemas"]["Track"] & {
+            encoded: string;
         };
     };
     responses: never;

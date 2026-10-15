@@ -13,6 +13,7 @@ export { JobsResource, type WaitQuery } from './jobs.js'
 export { MinecraftResource, type RenderQuery } from './minecraft.js'
 export {
   MUSIC_EVENTS,
+  MUSIC_SEARCH_PROVIDERS,
   MusicResource,
   type LoopBody,
   type MoveBody,
@@ -20,7 +21,9 @@ export {
   type MusicEventMap,
   type MusicEventName,
   type MusicEventTrack,
+  type MusicSearchProvider,
   type PlayBody,
+  type SearchQuery,
   type SeekBody,
   type VolumeBody,
 } from './music/index.js'

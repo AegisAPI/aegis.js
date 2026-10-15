@@ -2,7 +2,7 @@ import { Resource } from '../base.js'
 import { EventSocket, type SocketOptions } from '../../socket.js'
 import type { Http } from '../../http.js'
 import type { MusicEventMap, MusicEventName } from './music-events.js'
-import type { JsonBodyOf, Operation } from '../../types.js'
+import type { JsonBodyOf, Operation, QueryOf } from '../../types.js'
 
 const PLAY = '/v1/music/guilds/{guildId}/play' as const
 const PAUSE = '/v1/music/guilds/{guildId}/pause' as const
@@ -17,8 +17,18 @@ const SEEK = '/v1/music/guilds/{guildId}/seek' as const
 const SHUFFLE = '/v1/music/guilds/{guildId}/shuffle' as const
 const RESTART = '/v1/music/guilds/{guildId}/restart' as const
 const LOOP = '/v1/music/guilds/{guildId}/loop' as const
+const SEARCH = '/v1/music/search' as const
 
 export type PlayBody = JsonBodyOf<Operation<typeof PLAY, 'post'>>
+export type SearchQuery = QueryOf<Operation<typeof SEARCH, 'get'>>
+
+export type MusicSearchProvider = NonNullable<SearchQuery['provider']>
+
+export const MUSIC_SEARCH_PROVIDERS = [
+  'youtube',
+  'spotify',
+] as const satisfies readonly MusicSearchProvider[]
+
 export type SeekBody = JsonBodyOf<Operation<typeof SEEK, 'post'>>
 export type VolumeBody = JsonBodyOf<Operation<typeof VOLUME, 'patch'>>
 export type MuteBody = JsonBodyOf<Operation<typeof MUTE, 'post'>>
@@ -38,10 +48,7 @@ export class MusicResource extends Resource {
     return this.socket.connected
   }
 
-  /**
-   * Subscribes to a music event, opening the socket on the first listener.
-   * Returns a function that unsubscribes.
-   */
+  /** Opens the socket on the first listener; the return unsubscribes. */
   on<K extends MusicEventName>(
     event: K,
     listener: (data: MusicEventMap[K]) => void,
@@ -67,6 +74,11 @@ export class MusicResource extends Resource {
   disconnect() {
     this.socket.close()
   }
+
+  search(params: SearchQuery) {
+    return this.call('get', SEARCH, { query: params })
+  }
+
   play(guildId: string, body: PlayBody) {
     return this.call('post', PLAY, { params: { guildId }, body })
   }
