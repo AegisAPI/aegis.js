@@ -38,6 +38,6 @@
     "@types/bun": "latest",
     "openapi-typescript": "^7.13.0",
     "prettier": "^3.9.10",
-    "typescript": "^5.9.0"
+    "typescript": "^7.0.2"
   }
 }
