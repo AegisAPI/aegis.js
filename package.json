@@ -1,0 +1,43 @@
+{
+  "name": "aegis.js",
+  "version": "0.1.0",
+  "description": "Typed client for the Aegis API.",
+  "keywords": [
+    "aegis",
+    "discord",
+    "bot",
+    "discord.js",
+    "typescript",
+    "api-client"
+  ],
+  "license": "MIT",
+  "author": "Mubi",
+  "type": "module",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "schema:build": "openapi-typescript https://api.aegi.run/openapi.json -o src/generated/schema.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "build": "tsc -p tsconfig.build.json",
+    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\" \"*.md\" \"*.json\" \"*.mjs\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"tests/**/*.ts\" \"*.md\" \"*.json\" \"*.mjs\"",
+    "prepublishOnly": "bun run build"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "openapi-typescript": "^7.13.0",
+    "prettier": "^3.9.10",
+    "typescript": "^5.9.0"
+  }
+}
