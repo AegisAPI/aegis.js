@@ -15,7 +15,7 @@ Every route, parameter, body and response is typed from the API's OpenAPI docume
 ## Install
 
 ```sh
-npm install aegis.js
+npm install @aegis-api/aegis.js
 ```
 
 Needs a runtime with a global `fetch` (Node 18+). The event socket also needs a global `WebSocket` (Node 22+), unless you supply your own.
@@ -23,7 +23,7 @@ Needs a runtime with a global `fetch` (Node 18+). The event socket also needs a 
 ## Quick start
 
 ```ts
-import { Aegis } from 'aegis.js'
+import { Aegis } from 'aegis-api'
 
 const aegis = new Aegis({ apiKey: process.env.AEGIS_API_KEY })
 
@@ -149,7 +149,7 @@ How the socket behaves:
 Every non-2xx answer, and any request that never left the machine, throws an `AegisError`.
 
 ```ts
-import { AegisError } from 'aegis.js'
+import { AegisError } from 'aegis-api'
 
 try {
   await aegis.music.play(guildId, { query: 'lofi' })
@@ -198,7 +198,7 @@ import type {
   Paths,
   RequestOptions,
   Result,
-} from 'aegis.js'
+} from 'aegis-api'
 ```
 
 `components` is the whole OpenAPI `components` namespace, so any schema in the document is reachable from there.

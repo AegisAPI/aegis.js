@@ -1,5 +1,5 @@
 {
-  "name": "aegis.js",
+  "name": "aegis-api",
   "version": "0.1.0",
   "description": "Typed client for the Aegis API.",
   "keywords": [
