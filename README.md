@@ -1,7 +1,7 @@
-# aegis.js
+# aegis-api
 
 [![CI](https://github.com/AegisAPI/aegis.js/actions/workflows/ci.yml/badge.svg)](https://github.com/AegisAPI/aegis.js/actions/workflows/ci.yml)
-[![npm](https://img.shields.io/npm/v/aegis.js)](https://www.npmjs.com/package/aegis.js)
+[![npm](https://img.shields.io/npm/v/aegis-api)](https://www.npmjs.com/package/aegis-api)
 
 The official TypeScript client for the [Aegis](https://aegi.run) API: music, images, games and utilities for a Discord bot, so you do not have to build any of it yourself.
 
