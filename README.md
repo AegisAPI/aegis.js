@@ -118,7 +118,10 @@ if (finished.status === 'completed') console.log(finished.result)
 Image filters, overlays and screenshots queue too, so they return a `jobId` the same way.
 
 ```ts
-const shot = await aegis.tools.screenshot({ url: 'https://aegi.run', device: 'mobile' })
+const shot = await aegis.tools.screenshot({
+  url: 'https://aegi.run',
+  device: 'mobile',
+})
 const { result } = await aegis.jobs.wait(shot.jobId, { timeout: 60 })
 ```
 
