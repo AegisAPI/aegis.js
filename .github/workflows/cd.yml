@@ -1,0 +1,51 @@
+name: Publish
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          # Trusted publishing needs npm 11.5.1+ on Node 22.14.0+.
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+          # Never cache in a release build: a stale tarball is worse than a slow one.
+          package-manager-cache: false
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - run: bun install --frozen-lockfile
+
+      - name: Check the tag matches package.json
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          version="$(node -p "require('./package.json').version")"
+          if [ "$tag" != "$version" ]; then
+            echo "::error::tag $GITHUB_REF_NAME says $tag but package.json says $version"
+            exit 1
+          fi
+
+      - name: Type check
+        run: bun run typecheck
+
+      - name: Test
+        run: bun test
+
+      - name: Build
+        run: bun run build
+
+      # No NODE_AUTH_TOKEN: the OIDC identity above is the credential, and npm
+      # attaches provenance automatically for a public repo.
+      - run: npm publish
