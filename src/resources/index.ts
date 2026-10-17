@@ -9,6 +9,13 @@ export { BinaryResource, type DecodeQuery, type EncodeQuery } from './binary.js'
 export { FunResource, type RoleplayQuery } from './fun.js'
 export { GeneralResource } from './general.js'
 export { HolidaysResource } from './holidays.js'
+export {
+  ImageResource,
+  type FilterQuery,
+  type ImageFilterType,
+  type ImageOverlayType,
+  type OverlayQuery,
+} from './image.js'
 export { JobsResource, type WaitQuery } from './jobs.js'
 export { MinecraftResource, type RenderQuery } from './minecraft.js'
 export {
@@ -28,6 +35,7 @@ export {
   type VolumeBody,
 } from './music/index.js'
 export { RobloxResource } from './roblox.js'
+export { ToolsResource, type ScreenshotQuery } from './tools.js'
 export {
   TranslationResource,
   type DetectQuery,

@@ -170,17 +170,82 @@ describe('fun', () => {
 
     expectCall(calls, 'GET', '/v1/fun/roleplay?type=hug')
   })
+
+  it('roleplay sends amount when given', async () => {
+    const { aegis, calls } = make()
+    await aegis.fun.roleplay({ type: 'hug', amount: 3 })
+
+    expectCall(calls, 'GET', '/v1/fun/roleplay?type=hug&amount=3')
+  })
 })
 
 describe('binary', () => {
-  it('encode and decode', async () => {
+  it('encode and decode follow the API to /v1/tools/binary', async () => {
     const { aegis, calls } = make()
 
     await aegis.binary.encode({ text: 'hello' })
-    expectCall(calls, 'GET', '/v1/binary/encode?text=hello')
+    expectCall(calls, 'GET', '/v1/tools/binary/encode?text=hello')
 
     await aegis.binary.decode({ text: '1010' })
-    expectCall(calls, 'GET', '/v1/binary/decode?text=1010')
+    expectCall(calls, 'GET', '/v1/tools/binary/decode?text=1010')
+  })
+})
+
+describe('tools', () => {
+  it('screenshot', async () => {
+    const { aegis, calls } = make()
+    await aegis.tools.screenshot({ url: 'https://aegi.run' })
+
+    expectCall(calls, 'GET', '/v1/tools/screenshot?url=https%3A%2F%2Faegi.run')
+  })
+
+  it('screenshot passes device and fullpage through', async () => {
+    const { aegis, calls } = make()
+    await aegis.tools.screenshot({
+      url: 'https://aegi.run',
+      device: 'mobile',
+      fullpage: true,
+    })
+
+    expectCall(
+      calls,
+      'GET',
+      '/v1/tools/screenshot?url=https%3A%2F%2Faegi.run&device=mobile&fullpage=true',
+    )
+  })
+
+  it('encode and decode', async () => {
+    const { aegis, calls } = make()
+
+    await aegis.tools.encode({ text: 'hello' })
+    expectCall(calls, 'GET', '/v1/tools/binary/encode?text=hello')
+
+    await aegis.tools.decode({ text: '1010' })
+    expectCall(calls, 'GET', '/v1/tools/binary/decode?text=1010')
+  })
+})
+
+describe('image', () => {
+  it('filter puts the type in the path', async () => {
+    const { aegis, calls } = make()
+    await aegis.image.filter('ascii', { image: 'https://aegi.run/a.png' })
+
+    expectCall(
+      calls,
+      'GET',
+      '/v1/image/filter/ascii?image=https%3A%2F%2Faegi.run%2Fa.png',
+    )
+  })
+
+  it('overlay puts the type in the path', async () => {
+    const { aegis, calls } = make()
+    await aegis.image.overlay('wanted', { image: 'https://aegi.run/a.png' })
+
+    expectCall(
+      calls,
+      'GET',
+      '/v1/image/overlay/wanted?image=https%3A%2F%2Faegi.run%2Fa.png',
+    )
   })
 })
 

@@ -1,19 +1,15 @@
 import { Resource } from './base.js'
-import type { Operation, QueryOf } from '../types.js'
+import type { DecodeQuery, EncodeQuery } from './tools.js'
 
-const ENCODE = '/v1/binary/encode' as const
-const DECODE = '/v1/binary/decode' as const
+export type { DecodeQuery, EncodeQuery }
 
-export type EncodeQuery = QueryOf<Operation<typeof ENCODE, 'get'>>
-
-export type DecodeQuery = QueryOf<Operation<typeof DECODE, 'get'>>
-
+/** @deprecated The API moved these under `/v1/tools`; use `aegis.tools`. */
 export class BinaryResource extends Resource {
   encode(query: EncodeQuery) {
-    return this.call('get', ENCODE, { query })
+    return this.call('get', '/v1/tools/binary/encode', { query })
   }
 
   decode(query: DecodeQuery) {
-    return this.call('get', DECODE, { query })
+    return this.call('get', '/v1/tools/binary/decode', { query })
   }
 }

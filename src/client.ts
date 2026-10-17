@@ -6,10 +6,12 @@ import {
   FunResource,
   GeneralResource,
   HolidaysResource,
+  ImageResource,
   JobsResource,
   MinecraftResource,
   MusicResource,
   RobloxResource,
+  ToolsResource,
   TranslationResource,
 } from './resources/index.js'
 import type {
@@ -33,6 +35,8 @@ export class Aegis {
   readonly roblox: RobloxResource
   readonly holidays: HolidaysResource
   readonly fun: FunResource
+  readonly image: ImageResource
+  readonly tools: ToolsResource
   readonly general: GeneralResource
 
   constructor(options: AegisOptions = {}) {
@@ -53,6 +57,8 @@ export class Aegis {
     this.roblox = new RobloxResource(this.http)
     this.holidays = new HolidaysResource(this.http)
     this.fun = new FunResource(this.http)
+    this.image = new ImageResource(this.http)
+    this.tools = new ToolsResource(this.http)
     this.general = new GeneralResource(this.http)
   }
 

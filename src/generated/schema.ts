@@ -43,6 +43,308 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/image/filter/{type}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Filter an image
+         * @description Queues a job that applies a filter to an image. Available filters: pixelart, ascii, ascii-colorify, blur, grayscale, invert, sepia, threshold, posterize, edge, glitch, vignette, halftone.
+         */
+        get: {
+            parameters: {
+                query: {
+                    /** @description Public URL of the image. */
+                    image: string;
+                };
+                header?: never;
+                path: {
+                    type: "pixelart" | "ascii" | "ascii-colorify" | "blur" | "grayscale" | "invert" | "sepia" | "threshold" | "posterize" | "edge" | "glitch" | "vignette" | "halftone";
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Job queued */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            success: boolean;
+                            data: {
+                                /** Format: uuid */
+                                jobId: string;
+                                /** @enum {string} */
+                                status: "pending" | "processing";
+                                /** @enum {string} */
+                                type: "pixelart" | "ascii" | "ascii-colorify" | "blur" | "grayscale" | "invert" | "sepia" | "threshold" | "posterize" | "edge" | "glitch" | "vignette" | "halftone";
+                                image: string;
+                            };
+                            requestId: string;
+                        };
+                    };
+                };
+                /** @description Invalid filter type or url */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @enum {boolean} */
+                            success: false;
+                            error: string;
+                            requestId?: string;
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/image/overlay/{type}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Overlay an image
+         * @description Applies an overlay to an image
+         */
+        get: {
+            parameters: {
+                query: {
+                    image: string;
+                };
+                header?: never;
+                path: {
+                    type: "gay" | "communism" | "drip" | "wanted";
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description The overlay was applied to the image */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            success: boolean;
+                            data: {
+                                /** Format: uuid */
+                                jobId: string;
+                                /** @enum {string} */
+                                status: "pending" | "processing";
+                                /** @enum {string} */
+                                type: "gay" | "communism" | "drip" | "wanted";
+                                image: string;
+                            };
+                            requestId: string;
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/tools/screenshot": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Take a screenshot from a website.
+         * @description Queue a screenshot render
+         */
+        get: {
+            parameters: {
+                query: {
+                    url: string;
+                    device?: "desktop" | "mobile";
+                    fullpage?: boolean | null;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description The screenshot */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            success: boolean;
+                            data: {
+                                /** Format: uuid */
+                                jobId: string;
+                                /** @enum {string} */
+                                status: "pending" | "processing";
+                                url: string;
+                            };
+                            requestId: string;
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/tools/binary/encode": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Encode text to binary
+         * @description Encode text to binary
+         */
+        get: {
+            parameters: {
+                query: {
+                    text: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description The text was encoded to binary */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            error: boolean;
+                            data: {
+                                text?: string;
+                                error?: string;
+                            };
+                        };
+                    };
+                };
+                /** @description Bad request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            error: boolean;
+                            data: {
+                                text?: string;
+                                error?: string;
+                            };
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/tools/binary/decode": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Decode binary to text
+         * @description Decode binary to text
+         */
+        get: {
+            parameters: {
+                query: {
+                    text: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description The binary was decoded to text */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            error: boolean;
+                            data: {
+                                text?: string;
+                                error?: string;
+                            };
+                        };
+                    };
+                };
+                /** @description Bad request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            error: boolean;
+                            data: {
+                                text?: string;
+                                error?: string;
+                            };
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/fun/roleplay": {
         parameters: {
             query?: never;
@@ -50,11 +352,15 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Retorna um GIF aleatório da categoria de roleplay informada. */
+        /**
+         * Returns a GIF of an action scene from an anime.
+         * @description Returns a random GIF from the specified roleplay category.
+         */
         get: {
             parameters: {
                 query: {
                     type: "angry" | "baka" | "bite" | "bleh" | "blowkiss" | "blush" | "bonk" | "bored" | "carry" | "clap" | "confused" | "cry" | "cuddle" | "dance" | "facepalm" | "feed" | "handhold" | "handshake" | "happy" | "highfive" | "hug" | "kabedon" | "kick" | "kiss" | "lappillow" | "laugh" | "lurk" | "nod" | "nom" | "nope" | "nya" | "pat" | "peck" | "poke" | "pout" | "punch" | "run" | "salute" | "shake" | "shocked" | "shoot" | "shrug" | "sip" | "slap" | "sleep" | "smile" | "smug" | "spin" | "stare" | "tableflip" | "teehee" | "think" | "thumbsup" | "tickle" | "wag" | "wave" | "wink" | "yawn" | "yeet";
+                    amount?: number;
                 };
                 header?: never;
                 path?: never;
@@ -117,130 +423,6 @@ export interface paths {
                     };
                     content: {
                         "application/json": components["schemas"]["ErrorResponse"];
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/binary/encode": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Encode text to binary
-         * @description Encode text to binary
-         */
-        get: {
-            parameters: {
-                query: {
-                    text: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description The text was encoded to binary */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: boolean;
-                            data: {
-                                text?: string;
-                                error?: string;
-                            };
-                        };
-                    };
-                };
-                /** @description Bad request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: boolean;
-                            data: {
-                                text?: string;
-                                error?: string;
-                            };
-                        };
-                    };
-                };
-            };
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/binary/decode": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Decode binary to text
-         * @description Decode binary to text
-         */
-        get: {
-            parameters: {
-                query: {
-                    text: string;
-                };
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description The binary was decoded to text */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: boolean;
-                            data: {
-                                text?: string;
-                                error?: string;
-                            };
-                        };
-                    };
-                };
-                /** @description Bad request */
-                400: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            error: boolean;
-                            data: {
-                                text?: string;
-                                error?: string;
-                            };
-                        };
                     };
                 };
             };

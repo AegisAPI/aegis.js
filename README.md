@@ -7,7 +7,7 @@ The official TypeScript client for the [Aegis](https://aegi.run) API: music, ima
 
 Every route, parameter, body and response is typed from the API's OpenAPI document. Successful responses arrive already unwrapped, and anything the API rejects arrives as an `AegisError`.
 
-- Typed methods for all 38 `/v1` routes.
+- Typed methods for all 47 `/v1` routes.
 - Zero runtime dependencies.
 - ESM only, ships type declarations.
 - A typed WebSocket client for the music events.
@@ -70,12 +70,15 @@ Resources hang off the client, grouped the way the API groups them.
 - `aegis.minecraft`: `info` `textures` `render`
 - `aegis.jobs`: `get` `wait`
 - `aegis.bible`: `languages` `types` `translations` `books` `chapter` `search` `verses` `data`
-- `aegis.binary`: `encode` `decode`
 - `aegis.translation`: `translate` `detect` `languages`
 - `aegis.roblox`: `user` `game`
 - `aegis.holidays`: `next` `year`
 - `aegis.fun`: `roleplay`
+- `aegis.image`: `filter` `overlay`
+- `aegis.tools`: `screenshot` `encode` `decode`
 - `aegis.general`: `status`
+
+`aegis.binary` still answers `encode` and `decode`, but the API moved those under `/v1/tools`, so it is deprecated in favour of `aegis.tools`.
 
 A few of them in full:
 
@@ -89,8 +92,9 @@ await aegis.translation.translate({ text: 'hello', to: 'pt' })
 await aegis.bible.verses('bbe', { refs: 'John 3:16' })
 await aegis.holidays.next('BR')
 await aegis.roblox.game(107778070777162)
-await aegis.binary.encode({ text: 'hello' })
-await aegis.fun.roleplay({ type: 'hug' })
+await aegis.tools.encode({ text: 'hello' })
+await aegis.image.filter('ascii', { image: 'https://aegi.run/cat.png' })
+await aegis.fun.roleplay({ type: 'hug', amount: 3 })
 ```
 
 ### Jobs
@@ -109,6 +113,13 @@ const job = await aegis.jobs.get(queued.jobId)
 // ...or hold the request open until it reaches a final state.
 const finished = await aegis.jobs.wait(queued.jobId, { timeout: 60 })
 if (finished.status === 'completed') console.log(finished.result)
+```
+
+Image filters, overlays and screenshots queue too, so they return a `jobId` the same way.
+
+```ts
+const shot = await aegis.tools.screenshot({ url: 'https://aegi.run', device: 'mobile' })
+const { result } = await aegis.jobs.wait(shot.jobId, { timeout: 60 })
 ```
 
 ## Events
