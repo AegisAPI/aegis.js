@@ -15,7 +15,7 @@ Every route, parameter, body and response is typed from the API's OpenAPI docume
 ## Install
 
 ```sh
-npm install @aegis-api/aegis.js
+npm install aegis-api
 ```
 
 Needs a runtime with a global `fetch` (Node 18+). The event socket also needs a global `WebSocket` (Node 22+), unless you supply your own.
