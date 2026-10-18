@@ -153,7 +153,6 @@ const shot = await aegis.tools.screenshot({
 })
 const { result } = await aegis.jobs.wait(shot.jobId, { timeout: 60 })
 ```
-```
 
 ## Events
 
