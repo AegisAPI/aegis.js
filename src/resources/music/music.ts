@@ -18,9 +18,23 @@ const SHUFFLE = '/v1/music/guilds/{guildId}/shuffle' as const
 const RESTART = '/v1/music/guilds/{guildId}/restart' as const
 const LOOP = '/v1/music/guilds/{guildId}/loop' as const
 const SEARCH = '/v1/music/search' as const
+const FADING = '/v1/music/guilds/{guildId}/fading' as const
+const NEXT_TRACK = '/v1/music/guilds/{guildId}/next-track' as const
+const FILTERS = '/v1/music/guilds/{guildId}/filters' as const
+const MIX = '/v1/music/guilds/{guildId}/mix' as const
+const MIX_ENTRY = '/v1/music/guilds/{guildId}/mix/{mixId}' as const
+const MEANING = '/v1/music/guilds/{guildId}/meaning' as const
+const LYRICS = '/v1/music/guilds/{guildId}/lyrics' as const
 
 export type PlayBody = JsonBodyOf<Operation<typeof PLAY, 'post'>>
 export type SearchQuery = QueryOf<Operation<typeof SEARCH, 'get'>>
+export type FadingBody = JsonBodyOf<Operation<typeof FADING, 'put'>>
+export type NextTrackBody = JsonBodyOf<Operation<typeof NEXT_TRACK, 'put'>>
+export type FiltersBody = JsonBodyOf<Operation<typeof FILTERS, 'put'>>
+export type MixAddBody = JsonBodyOf<Operation<typeof MIX, 'post'>>
+export type MixVolumeBody = JsonBodyOf<Operation<typeof MIX_ENTRY, 'patch'>>
+export type MeaningQuery = QueryOf<Operation<typeof MEANING, 'get'>>
+export type LyricsQuery = QueryOf<Operation<typeof LYRICS, 'get'>>
 
 export type MusicSearchProvider = NonNullable<SearchQuery['provider']>
 
@@ -152,5 +166,57 @@ export class MusicResource extends Resource {
       params: { guildId, index },
       body,
     })
+  }
+
+  fading(guildId: string) {
+    return this.call('get', FADING, { params: { guildId } })
+  }
+
+  setFading(guildId: string, body: FadingBody) {
+    return this.call('put', FADING, { params: { guildId }, body })
+  }
+
+  nextTrack(guildId: string) {
+    return this.call('get', NEXT_TRACK, { params: { guildId } })
+  }
+
+  setNextTrack(guildId: string, body: NextTrackBody) {
+    return this.call('put', NEXT_TRACK, { params: { guildId }, body })
+  }
+
+  filters(guildId: string) {
+    return this.call('get', FILTERS, { params: { guildId } })
+  }
+
+  /** Send `{}` to clear every filter. */
+  setFilters(guildId: string, body: FiltersBody) {
+    return this.call('put', FILTERS, { params: { guildId }, body })
+  }
+
+  /** The auxiliary tracks playing over the main one. */
+  mix(guildId: string) {
+    return this.call('get', MIX, { params: { guildId } })
+  }
+
+  /** `volume` is required by the type even though the server defaults it. */
+  addMix(guildId: string, body: MixAddBody) {
+    return this.call('post', MIX, { params: { guildId }, body })
+  }
+
+  setMixVolume(guildId: string, mixId: string, body: MixVolumeBody) {
+    return this.call('patch', MIX_ENTRY, { params: { guildId, mixId }, body })
+  }
+
+  removeMix(guildId: string, mixId: string) {
+    return this.call('delete', MIX_ENTRY, { params: { guildId, mixId } })
+  }
+
+  /** Resolves with `meaning: null` when nothing was found. */
+  meaning(guildId: string, query: MeaningQuery) {
+    return this.call('get', MEANING, { params: { guildId }, query })
+  }
+
+  lyrics(guildId: string, query: LyricsQuery) {
+    return this.call('get', LYRICS, { params: { guildId }, query })
   }
 }

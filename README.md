@@ -7,7 +7,7 @@ The official TypeScript client for the [Aegis](https://aegi.run) API: music, ima
 
 Every route, parameter, body and response is typed from the API's OpenAPI document. Successful responses arrive already unwrapped, and anything the API rejects arrives as an `AegisError`.
 
-- Typed methods for all 47 `/v1` routes.
+- Typed methods for all 59 `/v1` routes.
 - Zero runtime dependencies.
 - ESM only, ships type declarations.
 - A typed WebSocket client for the music events.
@@ -66,7 +66,7 @@ Every option goes to the constructor.
 
 Resources hang off the client, grouped the way the API groups them.
 
-- `aegis.music`: `search` `play` `pause` `resume` `skip` `stop` `queue` `clearQueue` `volume` `setVolume` `mute` `unmute` `seek` `shuffle` `restart` `loop` `setLoop` `removeFromQueue` `moveInQueue`
+- `aegis.music`: `search` `play` `pause` `resume` `skip` `stop` `queue` `clearQueue` `volume` `setVolume` `mute` `unmute` `seek` `shuffle` `restart` `loop` `setLoop` `removeFromQueue` `moveInQueue` `fading` `setFading` `nextTrack` `setNextTrack` `filters` `setFilters` `mix` `addMix` `setMixVolume` `removeMix` `meaning` `lyrics`
 - `aegis.minecraft`: `info` `textures` `render`
 - `aegis.jobs`: `get` `wait`
 - `aegis.bible`: `languages` `types` `translations` `books` `chapter` `search` `verses` `data`
@@ -87,6 +87,35 @@ await aegis.music.setVolume(guildId, { volume: 40, muted: true }) // 100 is defa
 await aegis.music.seek(guildId, { position: 30_000 })
 await aegis.music.setLoop(guildId, { mode: 'queue' }) // 'off' | 'track' | 'queue'
 await aegis.music.moveInQueue(guildId, 3, { to: 0 })
+
+// Ramp the volume on track changes and seeks.
+await aegis.music.setFading(guildId, {
+  enabled: true,
+  trackStart: { duration: 1500, curve: 's-curve' },
+  seek: { duration: 500, curve: 'linear' },
+})
+
+// Buffer the next track while this one plays. Off by default.
+await aegis.music.setNextTrack(guildId, { gapless: true })
+
+// Real-time DSP on the player, so it stays until you change it. {} clears it.
+await aegis.music.setFilters(guildId, {
+  equalizer: [{ band: 0, gain: 0.2 }],
+  echo: { delay: 500, feedback: 0.3, mix: 0.5 },
+})
+
+// Auxiliary audio over the main track, for a voiceover or a sound effect.
+const [clip] = (await aegis.music.search({ query: 'airhorn' })).results
+const { layer } = await aegis.music.addMix(guildId, {
+  track: { encoded: clip!.encoded },
+  volume: 0.9,
+})
+await aegis.music.setMixVolume(guildId, layer.mixId, { volume: 0.4 })
+await aegis.music.removeMix(guildId, layer.mixId)
+
+// Background on the current track. Lyrics are cached until the track changes.
+await aegis.music.meaning(guildId, { encoded })
+await aegis.music.lyrics(guildId, { encoded, lang: 'pt' })
 
 await aegis.translation.translate({ text: 'hello', to: 'pt' })
 await aegis.bible.verses('bbe', { refs: 'John 3:16' })
@@ -123,6 +152,7 @@ const shot = await aegis.tools.screenshot({
   device: 'mobile',
 })
 const { result } = await aegis.jobs.wait(shot.jobId, { timeout: 60 })
+```
 ```
 
 ## Events

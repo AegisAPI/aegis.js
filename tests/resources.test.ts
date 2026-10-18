@@ -249,6 +249,102 @@ describe('image', () => {
   })
 })
 
+describe('music nodelink', () => {
+  it('fading reads and writes', async () => {
+    const { aegis, calls } = make()
+
+    await aegis.music.fading('1')
+    expectCall(calls, 'GET', '/v1/music/guilds/1/fading')
+
+    await aegis.music.setFading('1', { enabled: true })
+    expectCall(calls, 'PUT', '/v1/music/guilds/1/fading')
+    expect(lastCall(calls).init.body).toBe('{"enabled":true}')
+  })
+
+  it('fading passes every section through', async () => {
+    const { aegis, calls } = make()
+    await aegis.music.setFading('1', {
+      enabled: true,
+      trackStart: { duration: 1500, curve: 's-curve' },
+      seek: { duration: 500, curve: 'linear' },
+    })
+
+    expect(lastCall(calls).init.body).toBe(
+      '{"enabled":true,"trackStart":{"duration":1500,"curve":"s-curve"},"seek":{"duration":500,"curve":"linear"}}',
+    )
+  })
+
+  it('next-track reads and writes', async () => {
+    const { aegis, calls } = make()
+
+    await aegis.music.nextTrack('1')
+    expectCall(calls, 'GET', '/v1/music/guilds/1/next-track')
+
+    await aegis.music.setNextTrack('1', { gapless: true })
+    expectCall(calls, 'PUT', '/v1/music/guilds/1/next-track')
+    expect(lastCall(calls).init.body).toBe('{"gapless":true}')
+  })
+
+  it('filters reads and writes', async () => {
+    const { aegis, calls } = make()
+
+    await aegis.music.filters('1')
+    expectCall(calls, 'GET', '/v1/music/guilds/1/filters')
+
+    await aegis.music.setFilters('1', {})
+    expectCall(calls, 'PUT', '/v1/music/guilds/1/filters')
+    expect(lastCall(calls).init.body).toBe('{}')
+  })
+
+  it('filters passes the node filters through', async () => {
+    const { aegis, calls } = make()
+    await aegis.music.setFilters('1', {
+      echo: { delay: 500, feedback: 0.3, mix: 0.5 },
+    })
+
+    expect(lastCall(calls).init.body).toBe(
+      '{"echo":{"delay":500,"feedback":0.3,"mix":0.5}}',
+    )
+  })
+
+  it('mix lists, adds, sets volume and removes', async () => {
+    const { aegis, calls } = make()
+
+    await aegis.music.mix('1')
+    expectCall(calls, 'GET', '/v1/music/guilds/1/mix')
+
+    await aegis.music.addMix('1', { track: { encoded: 'QAAA' }, volume: 0.9 })
+    expectCall(calls, 'POST', '/v1/music/guilds/1/mix')
+    expect(lastCall(calls).init.body).toBe(
+      '{"track":{"encoded":"QAAA"},"volume":0.9}',
+    )
+
+    await aegis.music.setMixVolume('1', 'mix-1', { volume: 0.5 })
+    expectCall(calls, 'PATCH', '/v1/music/guilds/1/mix/mix-1')
+    expect(lastCall(calls).init.body).toBe('{"volume":0.5}')
+
+    await aegis.music.removeMix('1', 'mix-1')
+    expectCall(calls, 'DELETE', '/v1/music/guilds/1/mix/mix-1')
+  })
+
+  it('meaning sends the encoded query', async () => {
+    const { aegis, calls } = make()
+    await aegis.music.meaning('1', { encoded: 'QAAA' })
+
+    expectCall(calls, 'GET', '/v1/music/guilds/1/meaning?encoded=QAAA')
+  })
+
+  it('lyrics sends lang only when given', async () => {
+    const { aegis, calls } = make()
+
+    await aegis.music.lyrics('1', { encoded: 'QAAA' })
+    expectCall(calls, 'GET', '/v1/music/guilds/1/lyrics?encoded=QAAA')
+
+    await aegis.music.lyrics('1', { encoded: 'QAAA', lang: 'pt' })
+    expectCall(calls, 'GET', '/v1/music/guilds/1/lyrics?encoded=QAAA&lang=pt')
+  })
+})
+
 describe('translation', () => {
   it('translate', async () => {
     const { aegis, calls } = make()
