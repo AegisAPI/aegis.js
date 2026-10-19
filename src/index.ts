@@ -19,6 +19,9 @@ export type { components }
 
 /** Named response shapes, so callers do not have to reach into `components`. */
 export type Track = components['schemas']['Track']
+export type EncodedTrack = components['schemas']['EncodedTrack']
+export type MusicNode = components['schemas']['MusicNode']
+export type PlayerInfo = components['schemas']['PlayerInfo']
 export type PlayerState = components['schemas']['PlayerState']
 export type PlayResult = components['schemas']['PlayResult']
 export type PausedResult = components['schemas']['PausedResult']

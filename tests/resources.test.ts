@@ -62,6 +62,13 @@ describe('music', () => {
     expectCall(calls, 'DELETE', '/v1/music/guilds/1/queue')
   })
 
+  it('player reads encoded tracks and the node', async () => {
+    const { aegis, calls } = make()
+    await aegis.music.player('1')
+
+    expectCall(calls, 'GET', '/v1/music/guilds/1/player')
+  })
+
   it('volume reads on GET and sets on PATCH', async () => {
     const { aegis, calls } = make()
 

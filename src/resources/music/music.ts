@@ -9,6 +9,7 @@ const PAUSE = '/v1/music/guilds/{guildId}/pause' as const
 const RESUME = '/v1/music/guilds/{guildId}/resume' as const
 const SKIP = '/v1/music/guilds/{guildId}/skip' as const
 const GUILD = '/v1/music/guilds/{guildId}' as const
+const PLAYER = '/v1/music/guilds/{guildId}/player' as const
 const QUEUE = '/v1/music/guilds/{guildId}/queue' as const
 const QUEUE_ENTRY = '/v1/music/guilds/{guildId}/queue/{index}' as const
 const VOLUME = '/v1/music/guilds/{guildId}/volume' as const
@@ -115,6 +116,11 @@ export class MusicResource extends Resource {
 
   queue(guildId: string) {
     return this.call('get', QUEUE, { params: { guildId } })
+  }
+
+  /** The player state with encoded tracks, plus the node running it. */
+  player(guildId: string) {
+    return this.call('get', PLAYER, { params: { guildId } })
   }
 
   clearQueue(guildId: string) {

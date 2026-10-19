@@ -7,7 +7,7 @@ The official TypeScript client for the [Aegis](https://aegi.run) API: music, ima
 
 Every route, parameter, body and response is typed from the API's OpenAPI document. Successful responses arrive already unwrapped, and anything the API rejects arrives as an `AegisError`.
 
-- Typed methods for all 58 `/v1` routes.
+- Typed methods for 59 `/v1` routes, with the whole OpenAPI document behind `aegis.request`.
 - Zero runtime dependencies.
 - ESM only, ships type declarations.
 - A typed WebSocket client for the music events.
@@ -41,6 +41,10 @@ await aegis.music.play(guildId, { track: { encoded: chosen.encoded } })
 // Read the player: what is playing, where playback is, and the queue.
 const state = await aegis.music.queue(guildId)
 console.log(state.current?.title, state.volume, state.loop)
+
+// Same state, with a track token on every track and the node running it.
+const player = await aegis.music.player(guildId)
+console.log(player.node.id, player.current?.encoded)
 ```
 
 ## API key
@@ -66,7 +70,7 @@ Every option goes to the constructor.
 
 Resources hang off the client, grouped the way the API groups them.
 
-- `aegis.music`: `search` `play` `pause` `resume` `skip` `stop` `queue` `clearQueue` `volume` `setVolume` `mute` `unmute` `seek` `shuffle` `restart` `loop` `setLoop` `removeFromQueue` `moveInQueue` `fading` `setFading` `nextTrack` `setNextTrack` `filters` `setFilters` `mix` `addMix` `setMixVolume` `removeMix` `meaning` `lyrics`
+- `aegis.music`: `search` `play` `pause` `resume` `skip` `stop` `queue` `player` `clearQueue` `volume` `setVolume` `mute` `unmute` `seek` `shuffle` `restart` `loop` `setLoop` `removeFromQueue` `moveInQueue` `fading` `setFading` `nextTrack` `setNextTrack` `filters` `setFilters` `mix` `addMix` `setMixVolume` `removeMix` `meaning` `lyrics`
 - `aegis.minecraft`: `info` `textures` `render`
 - `aegis.jobs`: `get` `wait`
 - `aegis.bible`: `languages` `types` `translations` `books` `chapter` `search` `verses` `data`

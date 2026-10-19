@@ -2018,6 +2018,94 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/music/guilds/{guildId}/player": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Player state with encoded tracks
+         * @description The whole player, plus the Lavalink node running it. Unlike `GET /guilds/{guildId}/queue`, every track carries its `encoded` token, so it can be played again or passed to the next-track, mix, meaning, or lyrics routes.
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    guildId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description The player, with encoded tracks and its node. */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            data: components["schemas"]["PlayerInfo"];
+                        };
+                    };
+                };
+                /** @description The API key is not linked to a bot. */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description No player in that guild. */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Conflicts with the current player state. */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description The request cannot be carried out as given. */
+                422: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description The music workers are unavailable or timed out. */
+                503: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/music/guilds/{guildId}/pause": {
         parameters: {
             query?: never;
@@ -4760,6 +4848,45 @@ export interface components {
             isStream: boolean;
         };
         TrackRef: {
+            encoded: string;
+        };
+        PlayerInfo: {
+            node: components["schemas"]["MusicNode"];
+            channelId: string;
+            paused: boolean;
+            positionMs: number;
+            volume: number;
+            muted: boolean;
+            /**
+             * @description `track` repeats the current track, `queue` cycles the whole rotation. `queue` keeps going even when the queue holds a single track.
+             * @enum {string}
+             */
+            loop: "off" | "track" | "queue";
+            current: components["schemas"]["NullableEncodedTrack"];
+            queue: components["schemas"]["EncodedTrack"][];
+        };
+        MusicNode: {
+            /** @description The Lavalink node running this player. */
+            id: string;
+        };
+        NullableEncodedTrack: {
+            title: string;
+            author: string;
+            lengthMs: number;
+            uri: string | null;
+            artworkUrl: string | null;
+            isStream: boolean;
+            /** @description The track token, accepted wherever a track is referenced. */
+            encoded: string;
+        } | null;
+        EncodedTrack: {
+            title: string;
+            author: string;
+            lengthMs: number;
+            uri: string | null;
+            artworkUrl: string | null;
+            isStream: boolean;
+            /** @description The track token, accepted wherever a track is referenced. */
             encoded: string;
         };
         PausedResult: {
