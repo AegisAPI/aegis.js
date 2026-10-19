@@ -4630,7 +4630,7 @@ export interface components {
         ErrorResponse: {
             error: {
                 /** @enum {string} */
-                code: "bad_request" | "unauthorized" | "invalid_api_key" | "api_key_revoked" | "forbidden" | "not_found" | "method_not_allowed" | "conflict" | "validation_error" | "rate_limited" | "internal_error" | "service_unavailable";
+                code: "bad_request" | "unauthorized" | "invalid_api_key" | "api_key_revoked" | "forbidden" | "player_limit" | "not_found" | "method_not_allowed" | "conflict" | "validation_error" | "rate_limited" | "internal_error" | "service_unavailable";
                 message: string;
                 details?: unknown;
             };

@@ -7,7 +7,7 @@ The official TypeScript client for the [Aegis](https://aegi.run) API: music, ima
 
 Every route, parameter, body and response is typed from the API's OpenAPI document. Successful responses arrive already unwrapped, and anything the API rejects arrives as an `AegisError`.
 
-- Typed methods for all 59 `/v1` routes.
+- Typed methods for all 58 `/v1` routes.
 - Zero runtime dependencies.
 - ESM only, ships type declarations.
 - A typed WebSocket client for the music events.
