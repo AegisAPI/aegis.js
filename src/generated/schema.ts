@@ -43,6 +43,432 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/anime/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Search for an anime by name. */
+        get: {
+            parameters: {
+                query: {
+                    /** @description Name of the anime to search for */
+                    query: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Animes successfully found */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @description Indicates if an error occurred */
+                            error: boolean;
+                            /** @description List of animes matching the search query */
+                            data: {
+                                /** @description ID of the anime */
+                                id: string;
+                                /** @description Main title of the anime */
+                                title: string;
+                                /** @description Short synopsis of the anime */
+                                synopsis: string | null;
+                                /** @description Total number of episodes */
+                                episodeCount: number | null;
+                                /** @description Average rating percentage */
+                                averageRating: string | null;
+                                /** @description Airing status (e.g., current, finished) */
+                                status: string | null;
+                                /** @description Cover poster image URL */
+                                posterImage: string | null;
+                                /** @description Release start date */
+                                startDate: string | null;
+                            }[];
+                            /** @description Unique identifier for the request */
+                            requestId: string;
+                        };
+                    };
+                };
+                /** @description Bad request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Internal error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/anime/quote": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a random anime quote. */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Quote successfully retrieved */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @description Indicates if an error occurred */
+                            error: boolean;
+                            /** @description Payload containing the anime quote */
+                            data: {
+                                /** @description Anime details */
+                                anime: {
+                                    /** @description The ID of the anime */
+                                    id: number;
+                                    /** @description Name of the anime */
+                                    name: string;
+                                    /** @description Alternative name of the anime */
+                                    altName: string | null;
+                                };
+                                /** @description Character details */
+                                character: {
+                                    /** @description The ID of the character */
+                                    id: number;
+                                    /** @description Name of the character who said the quote */
+                                    name: string;
+                                };
+                                /** @description The anime quote content */
+                                quote: string;
+                            } | null;
+                            /** @description Unique identifier for the request */
+                            requestId: string;
+                        };
+                    };
+                };
+                /** @description Internal error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/pokemon/species": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get species details, lore, and forms of a Pokémon. */
+        get: {
+            parameters: {
+                query: {
+                    /** @description Name or ID of the Pokémon species */
+                    name: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Species successfully found */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @description Indicates if an error occurred */
+                            error: boolean;
+                            /** @description Payload data containing species details */
+                            data: {
+                                /** @description The unique ID of the Pokémon species */
+                                id: number;
+                                /** @description The name of the Pokémon species */
+                                name: string;
+                                /** @description Order number for sorting species */
+                                order: number;
+                                /** @description The chance of this Pokémon being female (in eighths, -1 for genderless) */
+                                genderRate: number;
+                                /** @description Catch rate of the Pokémon (0-255) */
+                                captureRate: number;
+                                /** @description Base happiness when caught */
+                                baseHappiness: number;
+                                /** @description Whether this is a baby Pokémon */
+                                isBaby: boolean;
+                                /** @description Whether this is a legendary Pokémon */
+                                isLegendary: boolean;
+                                /** @description Whether this is a mythical Pokémon */
+                                isMythical: boolean;
+                                /** @description Steps required to hatch an egg of this Pokémon */
+                                hatchCounter: number;
+                                /** @description Primary color category of the Pokémon */
+                                color: string;
+                                /** @description Body shape category of the Pokémon */
+                                shape: string;
+                                /** @description Typical natural habitat */
+                                habitat: string | null;
+                                /** @description Generation in which the Pokémon was introduced */
+                                generation: string;
+                                /** @description List of egg groups */
+                                eggGroups: string[];
+                                /** @description A descriptive Pokédex entry in English */
+                                flavorText: string;
+                                /** @description List of all form varieties for this species */
+                                varieties: {
+                                    /** @description Whether this is the default form */
+                                    isDefault: boolean;
+                                    /** @description Name of the specific form variant */
+                                    pokemonName: string;
+                                }[];
+                            } | null;
+                            /** @description Unique identifier for the request */
+                            requestId: string;
+                        };
+                    };
+                };
+                /** @description Species not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/pokemon/ability": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get information about a Pokémon ability. */
+        get: {
+            parameters: {
+                query: {
+                    /** @description Name or ID of the ability */
+                    name: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Ability successfully found */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @description Indicates if an error occurred */
+                            error: boolean;
+                            /** @description Payload data containing ability details */
+                            data: {
+                                /** @description The unique ID of the ability */
+                                id: number;
+                                /** @description The name of the ability */
+                                name: string;
+                                /** @description Whether this ability appears in the main series games */
+                                isMainSeries: boolean;
+                                /** @description Detailed effect description of the ability */
+                                effect: string;
+                                /** @description Flavor text summary of the ability */
+                                shortEffect: string;
+                                /** @description Total number of Pokémon that can have this ability */
+                                pokemonCount: number;
+                                /** @description List of Pokémon that possess this ability */
+                                pokemons: {
+                                    /** @description Name of the Pokémon */
+                                    name: string;
+                                    /** @description Whether it is a hidden ability for this Pokémon */
+                                    isHidden: boolean;
+                                    /** @description Ability slot number */
+                                    slot: number;
+                                }[];
+                            } | null;
+                            /** @description Unique identifier for the request */
+                            requestId: string;
+                        };
+                    };
+                };
+                /** @description Ability not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/pokemon": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get information about a Pokémon. */
+        get: {
+            parameters: {
+                query: {
+                    /** @description Name or ID of the Pokémon */
+                    name: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Pokémon successfully found */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @description Indicates if an error occurred */
+                            error: boolean;
+                            /** @description Payload data containing Pokémon details */
+                            data: {
+                                id?: Record<string, never>;
+                                /** @description The unique ID of the Pokémon */
+                                idNum: number;
+                                /** @description The name of the Pokémon */
+                                name: string;
+                                /** @description The height of the Pokémon in decimetres */
+                                height: number;
+                                /** @description The weight of the Pokémon in hectograms */
+                                weight: number;
+                                /** @description Collection of Pokémon images */
+                                images: {
+                                    /** @description Official high-quality artwork image URL */
+                                    officialArtwork: string | null;
+                                    /** @description Animated Gen 5 sprite GIF URL */
+                                    animatedSprite: string | null;
+                                    /** @description Default front pixel sprite URL */
+                                    frontDefault: string | null;
+                                };
+                                /** @description List of Pokémon types */
+                                types: string[];
+                                /** @description Base stats of the Pokémon */
+                                stats: {
+                                    /** @description Base HP stat */
+                                    hp: number;
+                                    /** @description Base Attack stat */
+                                    attack: number;
+                                    /** @description Base Defense stat */
+                                    defense: number;
+                                    /** @description Base Special Attack stat */
+                                    specialAttack: number;
+                                    /** @description Base Special Defense stat */
+                                    specialDefense: number;
+                                    /** @description Base Speed stat */
+                                    speed: number;
+                                };
+                                /** @description List of abilities with detailed info */
+                                abilities: {
+                                    /** @description Name of the ability */
+                                    name: string;
+                                    /** @description Whether this is a hidden ability */
+                                    isHidden: boolean;
+                                    /** @description Ability slot number */
+                                    slot: number;
+                                    /** @description Detailed effect description of the ability */
+                                    effect: string;
+                                }[];
+                            } | null;
+                            /** @description Unique identifier for the request */
+                            requestId: string;
+                        };
+                    };
+                };
+                /** @description Pokémon not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/image/filter/{type}": {
         parameters: {
             query?: never;
@@ -156,6 +582,215 @@ export interface paths {
                             };
                             requestId: string;
                         };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/tools/weather": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get detailed current weather information for a city.
+         * @description Returns current temperature, wind, humidity, pressure, visibility, precipitation, sun schedule and a weather icon for the requested city. All text fields are returned in English.
+         */
+        get: {
+            parameters: {
+                query: {
+                    /** @description Name of the city to search for. A country code can be appended, e.g. "London,GB". */
+                    city: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Weather successfully retrieved */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** @description Indicates if an error occurred */
+                            error: boolean;
+                            /** @description Payload data containing weather details */
+                            data: {
+                                /**
+                                 * @description Name of the city
+                                 * @example São Paulo
+                                 */
+                                city: string;
+                                /**
+                                 * @description ISO 3166 country code
+                                 * @example BR
+                                 */
+                                country: string;
+                                /** @description Geographical coordinates */
+                                coordinates: {
+                                    /** @description Longitude */
+                                    lon: number;
+                                    /** @description Latitude */
+                                    lat: number;
+                                };
+                                /** @description Timezone details of the city */
+                                timezone: {
+                                    /** @description Shift in seconds from UTC */
+                                    offsetSeconds: number;
+                                    /** @description Shift in hours from UTC */
+                                    offsetHours: number;
+                                    /**
+                                     * @description Offset formatted as UTC±HH:MM
+                                     * @example UTC-03:00
+                                     */
+                                    utc: string;
+                                };
+                                /** @description When the weather data was measured */
+                                observedAt: {
+                                    /** @description Observation time as Unix timestamp (UTC) */
+                                    timestamp: number;
+                                    /** @description Observation time in ISO 8601 (UTC) */
+                                    utc: string;
+                                    /** @description Observation time in the city local time (ISO 8601 without offset) */
+                                    local: string;
+                                };
+                                /** @description Temperature details */
+                                temperature: {
+                                    /**
+                                     * @description Unit used for the temperature values
+                                     * @enum {string}
+                                     */
+                                    unit: "celsius";
+                                    /** @description Current temperature in Celsius */
+                                    current: number;
+                                    /** @description Current temperature in Fahrenheit */
+                                    currentFahrenheit: number;
+                                    /** @description Perceived temperature in Celsius */
+                                    feelsLike: number;
+                                    /** @description Minimum observed temperature at the moment, within the city */
+                                    tempMin: number;
+                                    /** @description Maximum observed temperature at the moment, within the city */
+                                    tempMax: number;
+                                };
+                                /** @description Humidity percentage */
+                                humidity: number;
+                                /** @description Atmospheric pressure details */
+                                pressure: {
+                                    /** @description Atmospheric pressure at sea level in hPa */
+                                    sea: number;
+                                    /** @description Atmospheric pressure at ground level in hPa */
+                                    ground: number | null;
+                                };
+                                /** @description Visibility details */
+                                visibility: {
+                                    /** @description Visibility in metres (max 10000) */
+                                    meters: number | null;
+                                    /** @description Visibility in kilometres */
+                                    kilometers: number | null;
+                                };
+                                /** @description Cloudiness percentage */
+                                cloudiness: number;
+                                /** @description Wind details */
+                                wind: {
+                                    /** @description Wind speed in m/s */
+                                    speed: number;
+                                    /** @description Wind speed in km/h */
+                                    speedKmh: number;
+                                    /** @description Wind gust in m/s */
+                                    gust: number | null;
+                                    /** @description Wind direction in degrees */
+                                    deg: number;
+                                    /**
+                                     * @description Wind direction as a compass point
+                                     * @example SW
+                                     */
+                                    direction: string;
+                                };
+                                /** @description Precipitation details */
+                                precipitation: {
+                                    /** @description Rain volume in the last hour in mm */
+                                    rainLastHour: number;
+                                    /** @description Snow volume in the last hour in mm */
+                                    snowLastHour: number;
+                                };
+                                /** @description Sun schedule details */
+                                sun: {
+                                    /** @description Sunrise time as Unix timestamp */
+                                    sunrise: number;
+                                    /** @description Sunset time as Unix timestamp */
+                                    sunset: number;
+                                    /** @description Sunrise time in ISO 8601 (UTC) */
+                                    sunriseUtc: string;
+                                    /** @description Sunset time in ISO 8601 (UTC) */
+                                    sunsetUtc: string;
+                                    /** @description Sunrise time in the city local time */
+                                    sunriseLocal: string;
+                                    /** @description Sunset time in the city local time */
+                                    sunsetLocal: string;
+                                    /** @description Total daylight duration in seconds */
+                                    daylightSeconds: number;
+                                    /** @description Whether it is currently daytime in the city */
+                                    isDaytime: boolean;
+                                };
+                                /** @description Weather condition details */
+                                weather: {
+                                    /** @description Weather condition id */
+                                    id: number;
+                                    /** @description Main weather condition (e.g., Clear, Rain) */
+                                    main: string;
+                                    /** @description Detailed description of the weather */
+                                    description: string;
+                                    /**
+                                     * @description Icon name, without extension
+                                     * @example cloudy
+                                     */
+                                    icon: string;
+                                    /** @description Direct URL to the weather icon */
+                                    iconUrl: string;
+                                };
+                            } | null;
+                            /** @description Unique identifier for the request */
+                            requestId: string;
+                        };
+                    };
+                };
+                /** @description Bad request */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description City not found */
+                404: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
+                    };
+                };
+                /** @description Internal error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ErrorResponse"];
                     };
                 };
             };
